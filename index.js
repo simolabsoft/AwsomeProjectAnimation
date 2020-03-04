@@ -29,4 +29,5 @@ import panResponderViewHeight from "./src/panResponserViewHeight";
 import AnimatedSlider from "./src/AnimtesSlider";
 import draggableItems from "./src/draggableItems";
 import swypeToDelete from "./src/swipeToDelete";
-AppRegistry.registerComponent(appName, () => swypeToDelete);
+import uploadAnimation from "./src/uploadAnimation";
+AppRegistry.registerComponent(appName, () => uploadAnimation);

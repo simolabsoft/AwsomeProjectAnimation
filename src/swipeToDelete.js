@@ -7,6 +7,7 @@ import {
   Animated,
   Dimensions
 } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 const { width, height } = Dimensions.get("window");
 class Draggable extends Component {
@@ -20,6 +21,8 @@ class Draggable extends Component {
       opacity: new Animated.Value(1),
       deleteOpacity: new Animated.Value(0)
     };
+
+    let listOfBoxs = new Array(5);
   }
 
   componentWillMount() {
@@ -29,6 +32,7 @@ class Draggable extends Component {
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (e, gesture) => true,
       onPanResponderGrant: (e, gesture) => {
+        console.log("the index of dragable item  : ", this.props.index);
         this.state.pan.setOffset({
           x: this._val.x,
           y: null
@@ -57,6 +61,7 @@ class Draggable extends Component {
       },
       onPanResponderRelease: (e, gesture) => {
         if (this.isDropArea(gesture)) {
+          // this.props.decreseChildren();
           Animated.timing(this.state.opacity, {
             toValue: 0,
             duration: 1000
@@ -115,16 +120,26 @@ class Draggable extends Component {
 }
 
 export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.listOfBoxs = Array.from(Array(10), (d, i) => i);
+  }
+  decreseChildrenNumber = index => () => {
+    this.listOfBoxs.splice(index, 1);
+  };
   render() {
     return (
       <View style={styles.mainContainer}>
-        <View style={styles.row}>
-          <Draggable />
-          <Draggable />
-          <Draggable />
-          <Draggable />
-          <Draggable />
-        </View>
+        <ScrollView>
+          <View style={styles.row}>
+            {this.listOfBoxs.map((item, index) => (
+              <Draggable
+                index={index}
+                // decreseChildren={this.decreseChildrenNumber(index)}
+              />
+            ))}
+          </View>
+        </ScrollView>
       </View>
     );
   }
