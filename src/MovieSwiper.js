@@ -67,8 +67,12 @@ export default class MovieSwiper extends Component {
     });
   };
   getInerpolationCardRotaion = i => {
-    const inputRange = [(i - 1) * width, i * width, (i + 1) * width];
-    const outputRange = ["-30deg", "0deg", "30deg"];
+    const inputRange = [
+      (i - 1) * width + width * 0.5,
+      i * width,
+      (i + 1) * width - width * 0.5
+    ];
+    const outputRange = ["-20deg", "0deg", "0deg"];
     return this.state.animationScroll.interpolate({
       inputRange,
       outputRange,
