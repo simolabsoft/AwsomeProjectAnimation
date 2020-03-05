@@ -22,6 +22,7 @@ export default class uploadAnimation extends Component {
     this.upladBtnHeighAnimation = new Animated.Value(BUTTON_HEIGHT - 10);
     this.upladBtnWidthAnimation = new Animated.Value(BUTTON_WIDTH / 3);
     this.uploadingTextAnimation = new Animated.Value(-30);
+    this.completedText = new Animated.Value(-30);
     this.progressBarAnimation = new Animated.Value(0);
     this.progressBarHeightAnimation = new Animated.Value(8);
   }
@@ -52,8 +53,30 @@ export default class uploadAnimation extends Component {
         toValue: BUTTON_HEIGHT,
         duration: 1000,
         easing: Easing.exp
+      }),
+      Animated.timing(this.completedText, {
+        toValue: BUTTON_HEIGHT / 4,
+        duration: 500
       })
-    ]).start();
+    ]).start(() => {
+      // Animated.spring(this.scalContainer, {
+      //   toValue: 1,
+      //   friction: 4
+      // });
+      this.Animation.setValue(0);
+      // this.scalContainer.setValue(1),
+      this.upladBtnHeighAnimation.setValue(BUTTON_HEIGHT - 10);
+      this.upladBtnWidthAnimation.setValue(BUTTON_WIDTH / 3);
+      this.uploadingTextAnimation.setValue(-30);
+      this.completedText.setValue(-30);
+      this.progressBarAnimation.setValue(0);
+      // this.progressBarHeightAnimation.setValue(8);
+
+      Animated.spring(this.scalContainer, {
+        toValue: 1,
+        friction: 4
+      }).start();
+    });
   };
   render() {
     const ScaeConitainerStyle = {
@@ -94,6 +117,14 @@ export default class uploadAnimation extends Component {
       width: this.progressBarAnimation,
       height: this.progressBarHeightAnimation
     };
+    const completedTextStyle = {
+      bottom: this.completedText,
+      opacity: uploadOpacity
+    };
+    const compltedIcon = this.completedText.interpolate({
+      inputRange: [-30, BUTTON_HEIGHT / 4],
+      outputRange: [0, 1]
+    });
     return (
       <View style={styles.container}>
         <Animated.View style={[styles.buttonContainer, ScaeConitainerStyle]}>
@@ -128,6 +159,13 @@ export default class uploadAnimation extends Component {
           <Animated.View
             style={[styles.progressBar, progressBarAnimationStyle]}
           ></Animated.View>
+          <Animated.Image
+            source={require("../assets/correct.png")}
+            style={[styles.iconStyleCorrect, { opacity: compltedIcon }]}
+          ></Animated.Image>
+          <Animated.Text style={[styles.uploadingText, completedTextStyle]}>
+            Completed
+          </Animated.Text>
         </Animated.View>
       </View>
     );
@@ -206,5 +244,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     opacity: 1,
     bottom: 0
+  },
+  iconStyleCorrect: {
+    marginLeft: 50,
+    tintColor: "white"
   }
 });
