@@ -30,4 +30,5 @@ import AnimatedSlider from "./src/AnimtesSlider";
 import draggableItems from "./src/draggableItems";
 import swypeToDelete from "./src/swipeToDelete";
 import uploadAnimation from "./src/uploadAnimation";
-AppRegistry.registerComponent(appName, () => uploadAnimation);
+import movieSwiper from "./src/MovieSwiper";
+AppRegistry.registerComponent(appName, () => movieSwiper);

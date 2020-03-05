@@ -63,19 +63,34 @@ export default class uploadAnimation extends Component {
       //   toValue: 1,
       //   friction: 4
       // });
-      this.Animation.setValue(0);
-      // this.scalContainer.setValue(1),
-      this.upladBtnHeighAnimation.setValue(BUTTON_HEIGHT - 10);
-      this.upladBtnWidthAnimation.setValue(BUTTON_WIDTH / 3);
-      this.uploadingTextAnimation.setValue(-30);
-      this.completedText.setValue(-30);
-      this.progressBarAnimation.setValue(0);
-      // this.progressBarHeightAnimation.setValue(8);
+      // this.Animation.setValue(0);
+      // // this.scalContainer.setValue(1),
+      // this.upladBtnHeighAnimation.setValue(BUTTON_HEIGHT - 10);
+      // this.upladBtnWidthAnimation.setValue(BUTTON_WIDTH / 3);
+      // this.uploadingTextAnimation.setValue(-30);
+      // this.completedText.setValue(-30);
+      // this.progressBarAnimation.setValue(0);
+      // // this.progressBarHeightAnimation.setValue(8);
 
-      Animated.spring(this.scalContainer, {
-        toValue: 1,
-        friction: 4
-      }).start();
+      // Animated.spring(this.scalContainer, {
+      //   toValue: 1,
+      //   friction: 4
+      // }).start();
+      setTimeout(() => {
+        this.Animation.setValue(0);
+        // this.scalContainer.setValue(1),
+        this.upladBtnHeighAnimation.setValue(BUTTON_HEIGHT - 10);
+        this.upladBtnWidthAnimation.setValue(BUTTON_WIDTH / 3);
+        this.uploadingTextAnimation.setValue(-30);
+        this.completedText.setValue(-30);
+        this.progressBarAnimation.setValue(0);
+        // this.progressBarHeightAnimation.setValue(8);
+
+        Animated.spring(this.scalContainer, {
+          toValue: 1,
+          friction: 4
+        }).start();
+      }, 1000);
     });
   };
   render() {
