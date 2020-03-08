@@ -173,11 +173,18 @@ export default class MovieSwiper extends Component {
                       }
                     ]}
                   >
-                    <Image
+                    <Animated.Image
                       source={movie.image}
                       resizeMode={"cover"}
-                      style={{ height: 350, width: width - 80 }}
-                    ></Image>
+                      style={[
+                        { height: 350, width: width - 80 },
+                        {
+                          // backgroundColor: "red",
+
+                          transform: [{ rotate: cardRoation }]
+                        }
+                      ]}
+                    ></Animated.Image>
                   </Animated.View>
                   <Animated.View
                     style={[
@@ -258,6 +265,7 @@ const styles = StyleSheet.create({
   },
   carStyle: {
     width: width - 80,
+    height: 350,
     alignItems: "center",
     borderRadius: 20,
     overflow: "hidden",

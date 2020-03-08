@@ -109,9 +109,7 @@ export default class App extends React.Component {
     };
   }
   componentDidMount() {
-    setInterval(() => {
-      SplashScreen.hide();
-    }, 3000);
+    SplashScreen.hide();
   }
   render() {
     return (

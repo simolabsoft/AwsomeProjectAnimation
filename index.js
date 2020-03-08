@@ -31,4 +31,6 @@ import draggableItems from "./src/draggableItems";
 import swypeToDelete from "./src/swipeToDelete";
 import uploadAnimation from "./src/uploadAnimation";
 import movieSwiper from "./src/MovieSwiper";
-AppRegistry.registerComponent(appName, () => movieSwiper);
+import musicPlayer from "./src/musicPlayer";
+// SplashScreen.hide();
+AppRegistry.registerComponent(appName, () => musicPlayer);
