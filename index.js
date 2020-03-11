@@ -5,6 +5,7 @@
 import { AppRegistry } from "react-native";
 import App from "./App";
 import { name as appName } from "./app.json";
+import SplashScreen from "react-native-splash-screen";
 import Opacity from "./src/Opacity";
 import TranslatePosition from "./src/TranslatePosition";
 import Scale from "./src/scale";
@@ -32,5 +33,6 @@ import swypeToDelete from "./src/swipeToDelete";
 import uploadAnimation from "./src/uploadAnimation";
 import movieSwiper from "./src/MovieSwiper";
 import musicPlayer from "./src/musicPlayer";
-// SplashScreen.hide();
-AppRegistry.registerComponent(appName, () => musicPlayer);
+import Animation_3D from "./src/Animation_3d";
+SplashScreen.hide();
+AppRegistry.registerComponent(appName, () => Animation_3D);
