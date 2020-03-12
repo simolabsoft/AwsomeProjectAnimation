@@ -13,6 +13,7 @@ import clamp from "clamp";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 const { width, height } = Dimensions.get("window");
+const SWIPE_THRESHOLD = width / 2;
 export default class Animation_3D extends Component {
   constructor(props) {
     super(props);
@@ -41,7 +42,7 @@ export default class Animation_3D extends Component {
         this.state.pan.setValue({ x: 0, y: 0 });
       },
       onPanResponderMove: (e, gestureState) => {
-        if (gestureState.moveX < width - width / 4) {
+        if (gestureState.moveX < width - SWIPE_THRESHOLD) {
           Animated.event([null, { dx: this.state.pan.x, dy: null }])(
             e,
             gestureState
@@ -85,7 +86,7 @@ export default class Animation_3D extends Component {
           velocity = -3;
         }
 
-        if (Math.abs(this.state.pan.x._value) > width - width / 4) {
+        if (Math.abs(this.state.pan.x._value) > width - SWIPE_THRESHOLD) {
           Animated.decay(this.state.pan, {
             velocity: { x: velocity, y: gesture.vy },
             deceleration: 0.98
@@ -112,6 +113,7 @@ export default class Animation_3D extends Component {
     }).start(() => {
       if (!this.state.open) this.setState({ pointer: "auto", open: true });
       else this.setState({ pointer: "none", open: false });
+      this.state.pan.setValue({ x: 0, y: 0 });
     });
   };
   render() {
@@ -150,13 +152,20 @@ export default class Animation_3D extends Component {
       outputRange: [-width, 0],
       extrapolate: "clamp"
     });
-
+    const cardRotateOnTranslate = this.state.pan.x.interpolate({
+      inputRange: [-SWIPE_THRESHOLD, SWIPE_THRESHOLD],
+      outputRange: ["60deg", "-60deg"],
+      extrapolate: "clamp"
+    });
     const panStyle = {
-      transform: this.state.pan.getTranslateTransform()
+      transform: [
+        ...this.state.pan.getTranslateTransform(),
+        { rotateY: cardRotateOnTranslate }
+      ]
     };
     const cardRotate = this.golobalAnimation.interpolate({
       inputRange: [0, 1],
-      outputRange: ["30deg", "0deg"],
+      outputRange: ["0deg", "0deg"],
       extrapolate: "clamp"
     });
 
@@ -202,7 +211,9 @@ export default class Animation_3D extends Component {
             opacity: overlayOpacity
           }}
           pointerEvents={this.state.pointer}
-        ></Animated.View>
+        >
+          {/* <TouchableOpacity style={{ flex: 1 }} onPress ={this.startAnimation()}></TouchableOpacity> */}
+        </Animated.View>
         <Animated.View
           {...this.panResponder.panHandlers}
           style={[
