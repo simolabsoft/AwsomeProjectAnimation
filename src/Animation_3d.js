@@ -9,6 +9,7 @@ import {
   Image,
   PanResponder
 } from "react-native";
+import clamp from "clamp";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 const { width, height } = Dimensions.get("window");
@@ -40,14 +41,17 @@ export default class Animation_3D extends Component {
         this.state.pan.setValue({ x: 0, y: 0 });
       },
       onPanResponderMove: (e, gestureState) => {
-        // if (gestureState.dx > 0) {
+        if (gestureState.moveX < width - width / 4) {
+          Animated.event([null, { dx: this.state.pan.x, dy: null }])(
+            e,
+            gestureState
+          );
+        }
 
-        // }
-
-        Animated.event([null, { dx: this.state.pan.x, dy: null }])(
-          e,
-          gestureState
-        );
+        // Animated.event([null, { dx: this.state.pan.x, dy: null }])(
+        //   e,
+        //   gestureState
+        // );
       },
       onPanResponderRelease: (e, gesture) => {
         // if (this.isDropArea(gesture)) {
@@ -73,17 +77,41 @@ export default class Animation_3D extends Component {
         //     })
         //   ]).start();
         // }
+        let velocity;
+
+        if (gesture.dx >= 0) {
+          velocity = 3;
+        } else if (gesture.dx < 0) {
+          velocity = -3;
+        }
+
+        if (Math.abs(this.state.pan.x._value) > width - width / 4) {
+          Animated.decay(this.state.pan, {
+            velocity: { x: velocity, y: gesture.vy },
+            deceleration: 0.98
+          }).start(this.startAnimation());
+        } else {
+          Animated.spring(this.state.pan, {
+            toValue: { x: 0, y: 0 },
+            friction: 4
+          }).start();
+        }
       }
     });
   }
 
   startAnimation = () => {
     Animated.spring(this.golobalAnimation, {
-      toValue: 1,
-      friction: 5,
+      toValue: this.state.open ? 0 : 1,
+
+      friction: 6,
+
+      tension: 200,
+
       useNativeDriver: true
     }).start(() => {
-      this.setState({ pointer: "auto", open: true });
+      if (!this.state.open) this.setState({ pointer: "auto", open: true });
+      else this.setState({ pointer: "none", open: false });
     });
   };
   render() {
@@ -119,12 +147,18 @@ export default class Animation_3D extends Component {
     });
     const cardTranslatex = this.golobalAnimation.interpolate({
       inputRange: [0, 1],
-      outputRange: [-width + 100, width - 100 + width / 2 - (width - 100) / 2],
+      outputRange: [-width, 0],
       extrapolate: "clamp"
     });
+
     const panStyle = {
       transform: this.state.pan.getTranslateTransform()
     };
+    const cardRotate = this.golobalAnimation.interpolate({
+      inputRange: [0, 1],
+      outputRange: ["30deg", "0deg"],
+      extrapolate: "clamp"
+    });
 
     return (
       <View
@@ -173,7 +207,14 @@ export default class Animation_3D extends Component {
           {...this.panResponder.panHandlers}
           style={[
             styles.cardContainer,
-            { transform: [{ translateX: cardTranslatex }] }
+            this.state.open
+              ? panStyle
+              : {
+                  transform: [
+                    { rotateY: cardRotate },
+                    { translateX: cardTranslatex }
+                  ]
+                }
 
             // this.state.open
             //   ? panStyle
@@ -279,7 +320,7 @@ const styles = StyleSheet.create({
 
     elevation: 22,
     position: "absolute",
-    left: -width + 100,
+    // left: -width + 130,
     justifyContent: "space-around",
     alignItems: "center"
   },
