@@ -35,5 +35,6 @@ import movieSwiper from "./src/MovieSwiper";
 import musicPlayer from "./src/musicPlayer";
 import Animation_3D from "./src/Animation_3d";
 import BurstAnimation from "./src/BurstAnimation";
+import CircleAnimation from "./src/CircleAnimation";
 SplashScreen.hide();
-AppRegistry.registerComponent(appName, () => BurstAnimation);
+AppRegistry.registerComponent(appName, () => CircleAnimation);
